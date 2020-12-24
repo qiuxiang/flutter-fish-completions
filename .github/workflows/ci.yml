@@ -6,15 +6,16 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: fish-actions/install-fish@v1
-    - run: mkdir -p ~/.config/fish/completions
     - uses: subosito/flutter-action@v1
       with:
         channel: dev
     - run: |
         dart pub get
-        dart run > ~/.config/fish/completions/flutter.fish 
+        dart run > flutter.fish 
+        mkdir -p ~/.config/fish/completions
+        cp flutter.fish ~/.config/fish/completions/
         dart test
     - uses: actions/upload-artifact@v1
       with:
         name: flutter.fish
-        path: '~/.config/fish/completions/flutter.fish'
+        path: flutter.fish
