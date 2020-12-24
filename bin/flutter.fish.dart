@@ -31,10 +31,10 @@ class Command {
   }
 }
 
-const STATE_OPTIONS = 1;
-const STATE_COMMANDS = 2;
-
 Future<Tuple2<List<Option>, List<Command>>> parse([String command = '']) async {
+  const STATE_OPTIONS = 1;
+  const STATE_COMMANDS = 2;
+
   final result = await Process.run(
       'flutter', command.isEmpty ? ['help', '-v'] : ['help', command, '-v']);
   final lines = (result.stdout as String).split('\n');
@@ -96,22 +96,35 @@ Future<Tuple2<List<Option>, List<Command>>> parse([String command = '']) async {
   return Tuple2(options, commands);
 }
 
+String escape(String s) {
+  return s.trim().replaceAll('"', r'\"');
+}
+
+void printOption(Option option, [Command? command]) {
+  var completion = '$c -l "${option.long}" -d "${escape(option.description)}"';
+  if (option.short.isNotEmpty) {
+    completion += ' -s ${option.short}';
+  }
+  if (command != null) {
+    completion += ' -n "__fish_seen_subcommand_from ${command.name}"';
+  }
+  print(completion);
+}
+
+const c = 'complete -c flutter';
+
 main() async {
   final result = await parse();
-  final prefix = 'complete -c flutter';
   print('set -l commands ${result.item2.map((i) => i.name).join(' ')}');
-  print('$prefix -f');
-  for (final it in result.item1) {
-    print('$prefix -s ${it.short} -l ${it.long} -d "${it.description}"');
-  }
-  for (final it in result.item2) {
+  print('$c -f');
+  result.item1.forEach(printOption);
+  for (final command in result.item2) {
     print(
-        '$prefix -n "not __fish_seen_subcommand_from \$commands" -a ${it.name} -d "${it.description}"');
-    final result = await parse(it.name);
-    for (final i in result.item1) {
-      final d = i.description.replaceAll('"', r'\"');
-      print(
-          '$prefix -n "__fish_seen_subcommand_from ${it.name}" -s ${i.short} -l "${i.long}" -d "$d"');
-    }
+        '$c -n "not __fish_seen_subcommand_from \$commands" -a "${command.name}" -d "${escape(command.description)}"');
+    parse(command.name).then((result) {
+      for (final option in result.item1) {
+        printOption(option, command);
+      }
+    });
   }
 }
