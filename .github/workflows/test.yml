@@ -2,23 +2,23 @@ name: test
 on:
   push:
     tags-ignore:
-      - *
+      - "*"
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: fish-actions/install-fish@v1
-    - uses: subosito/flutter-action@v1
-      with:
-        channel: dev
-    - run: |
-        dart pub get
-        dart run > flutter.fish 
-        mkdir -p ~/.config/fish/completions
-        cp flutter.fish ~/.config/fish/completions/
-        dart test
-    - uses: actions/upload-artifact@v1
-      with:
-        name: flutter.fish
-        path: flutter.fish
+      - uses: actions/checkout@v2
+      - uses: fish-actions/install-fish@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: dev
+      - run: |
+          dart pub get
+          dart run > flutter.fish 
+          mkdir -p ~/.config/fish/completions
+          cp flutter.fish ~/.config/fish/completions/
+          dart test
+      - uses: actions/upload-artifact@v1
+        with:
+          name: flutter.fish
+          path: flutter.fish
