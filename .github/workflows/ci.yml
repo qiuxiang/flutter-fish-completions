@@ -16,5 +16,5 @@ jobs:
         dart test
     - uses: actions/upload-artifact@v1
       with:
-        name: fish-completions
-        path: ~/.config/fish/completions/flutter.fish
+        name: flutter.fish
+        path: '~/.config/fish/completions/flutter.fish'
