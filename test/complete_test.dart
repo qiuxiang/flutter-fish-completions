@@ -13,8 +13,8 @@ main() {
 
   test('complete commands', () async {
     final lines = await getCompletions('');
-    expect(lines.first, 'analyze	Analyze the project\'s Dart code.');
-    expect(lines.last, 'upgrade	Upgrade your copy of Flutter.');
+    expect(lines[0], 'analyze	Analyze the project\'s Dart code.');
+    expect(lines[1], 'assemble	Assemble and build Flutter resources.');
   });
 
   test('complete global options', () async {
@@ -27,6 +27,6 @@ main() {
   test('complete flutter analyze options', () async {
     final lines = await getCompletions('analyze -');
     expect(lines.last,
-        '--[no-]fatal-warnings	Treat warning level issues as fatal.(defaults to on)');
+        '--no-fatal-warnings	Treat warning level issues as fatal.(defaults to on)');
   });
 }
