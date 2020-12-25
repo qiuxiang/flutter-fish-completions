@@ -21,21 +21,39 @@ String buildOption(Option option, [Command? command]) {
   return completion;
 }
 
-generate(Command command) {
+void genOption(Option option, [Command? command]) {
+  if (option.long.startsWith('[no-]')) {
+    gen(String long) => print(buildOption(
+        Option(long: long, description: option.description), command));
+    gen(option.long.replaceAll('[no-]', ''));
+    gen(option.long.replaceAll('[no-]', 'no-'));
+  } else {
+    print(buildOption(option, command));
+  }
+}
+
+void genSubcommand(Command command, String commands) {
+  var n = 'not __fish_seen_subcommand_from $commands';
+  var parent = command.parent;
+  if (parent?.parent != null) {
+    n = '__fish_seen_subcommand_from ${parent?.name}; and ' + n;
+  }
+  print('$c -n "$n" -a ${command.name} -d "${command.description}"');
+}
+
+void generate(Command command) {
   print('$c -f');
-  command.options.forEach((it) => print(buildOption(it)));
+  command.options.forEach(genOption);
+  final commands = command.commands.map((i) => i.name).join(' ');
+  command.commands.add(Command(name: 'help'));
   command.commands.forEach((it) {
-    print('$c -n "__fish_use_subcommand" -a ${it.name} -d "${it.description}"');
-    it.options.forEach((option) => print(buildOption(option, it)));
-    final commands = it.commands
-        .where((i) => i.name != it.name)
-        .map((i) => i.name)
-        .join(' ');
+    genSubcommand(it, commands);
+    it.options.forEach((option) => genOption(option, it));
+    where(Command i) => i.name != it.name;
+    final subcommands = it.commands.where(where).map((i) => i.name).join(' ');
     it.commands.forEach((it) {
-      final n = '__fish_seen_subcommand_from ${it.parent?.name};' +
-          'and not __fish_seen_subcommand_from $commands';
-      print('$c -n "$n" -a ${it.name} -d "${it.description}"');
-      it.options.forEach((option) => print(buildOption(option, it)));
+      genSubcommand(it, subcommands);
+      it.options.forEach((option) => genOption(option, it));
     });
   });
 }
