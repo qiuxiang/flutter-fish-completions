@@ -2,31 +2,6 @@ import 'types.dart';
 
 const c = 'complete -c flutter';
 
-const fileOptions = [
-  'write',
-  'depfile',
-  'output',
-  'build-inputs',
-  'build-outputs',
-  'pid-file',
-  'output-dir',
-  'asset-dir',
-  'target',
-  'performance-measurement-file',
-  'android-sdk',
-  'android-studio-dir',
-  'build-dir',
-  'driver',
-  'arb-dir',
-  'template-arb-file',
-  'output-localization-file',
-  'template-arb-file',
-  'untranslated-messages-file',
-  'header-file',
-  'vmservice-out-file',
-  'coverage-path',
-];
-
 String escape(String s) {
   return s.trim().replaceAll('"', r'\"');
 }
@@ -58,9 +33,6 @@ void genOption(Option option, [Command? command]) {
   if (option.short == 'd') {
     s += ' -xa "(__fish_flutter_devices)"';
   }
-  if (fileOptions.contains(option.long)) {
-    s += ' -F';
-  }
   print(s);
 }
 
@@ -70,16 +42,15 @@ void genSubcommand(Command command, String commands) {
   if (parent?.parent != null) {
     n = '__fish_seen_subcommand_from ${parent?.name}; and ' + n;
   }
-  print('$c -n "$n" -a ${command.name} -d "${command.description}"');
+  print('$c -f -n "$n" -a ${command.name} -d "${command.description}"');
 }
 
 void generate(Command command) {
   print(r'''
-complete -c flutter -n "__fish_seen_subcommand_from channel" -a "(flutter channel | tail -n +2 | sed 's/\s//g' | sed 's/*\(\w\+\)/\1\tcurrent/')"
+complete -c flutter -f -n "__fish_seen_subcommand_from channel" -a "(flutter channel | tail -n +2 | sed 's/\s//g' | sed 's/*\(\w\+\)/\1\tcurrent/')"
 function __fish_flutter_devices -d 'Run flutter devices and parse output'
   flutter devices | tail -n +3 | sed -r 's/ \(\w+\)\s+• /\t/g'
 end''');
-  print('$c -f');
   command.options.forEach(genOption);
   final commands = command.commands.map((i) => i.name).join(' ');
   print('set -l commands $commands');
