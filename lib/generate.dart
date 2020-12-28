@@ -2,6 +2,31 @@ import 'types.dart';
 
 const c = 'complete -c flutter';
 
+const fileOptions = [
+  'write',
+  'depfile',
+  'output',
+  'build-inputs',
+  'build-outputs',
+  'pid-file',
+  'output-dir',
+  'asset-dir',
+  'target',
+  'performance-measurement-file',
+  'android-sdk',
+  'android-studio-dir',
+  'build-dir',
+  'driver',
+  'arb-dir',
+  'template-arb-file',
+  'output-localization-file',
+  'template-arb-file',
+  'untranslated-messages-file',
+  'header-file',
+  'vmservice-out-file',
+  'coverage-path',
+];
+
 String escape(String s) {
   return s.trim().replaceAll('"', r'\"');
 }
@@ -32,6 +57,9 @@ void genOption(Option option, [Command? command]) {
   var s = buildOption(option, command);
   if (option.short == 'd') {
     s += ' -xa "(__fish_flutter_devices)"';
+  }
+  if (fileOptions.contains(option.long)) {
+    s += ' -F';
   }
   print(s);
 }

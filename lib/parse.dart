@@ -56,7 +56,7 @@ Future<Command> parse([Command? command]) async {
           }
 
           short = groups[0]?.substring(1, 2) ?? '';
-          long = groups[1]?.substring(2) ?? '';
+          long = groups[1]?.substring(2).replaceAll(RegExp(r'=<.*'), '') ?? '';
           description = groups[2] ?? '';
         }
       }
