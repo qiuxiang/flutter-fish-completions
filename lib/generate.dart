@@ -75,20 +75,26 @@ void genSubcommand(Command command, String commands) {
 
 void generate(Command command) {
   print(r'''
+complete -c flutter -n "__fish_seen_subcommand_from channel" -a "(flutter channel | tail -n +2 | sed 's/\s//g' | sed 's/*\(\w\+\)/\1\tcurrent/')"
 function __fish_flutter_devices -d 'Run flutter devices and parse output'
   flutter devices | tail -n +3 | sed -r 's/ \(\w+\)\s+• /\t/g'
 end''');
   print('$c -f');
   command.options.forEach(genOption);
   final commands = command.commands.map((i) => i.name).join(' ');
+  print('set -l commands $commands');
   command.commands.add(Command(name: 'help'));
   command.commands.forEach((it) {
-    genSubcommand(it, commands);
+    genSubcommand(it, '\$commands');
     it.options.forEach((option) => genOption(option, it));
     where(Command i) => i.name != it.name;
     final subcommands = it.commands.where(where).map((i) => i.name).join(' ');
+    final name = '${it.name}_commands';
+    if (it.commands.isNotEmpty) {
+      print('set -l $name $subcommands');
+    }
     it.commands.forEach((it) {
-      genSubcommand(it, subcommands);
+      genSubcommand(it, '\$$name');
       it.options.forEach((option) => genOption(option, it));
     });
   });
