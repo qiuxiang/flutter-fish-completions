@@ -27,9 +27,13 @@ void genOption(Option option, [Command? command]) {
         Option(long: long, description: option.description), command));
     gen(option.long.replaceAll('[no-]', ''));
     gen(option.long.replaceAll('[no-]', 'no-'));
-  } else {
-    print(buildOption(option, command));
+    return;
   }
+  var s = buildOption(option, command);
+  if (option.short == 'd') {
+    s += ' -xa "(__fish_flutter_devices)"';
+  }
+  print(s);
 }
 
 void genSubcommand(Command command, String commands) {
@@ -42,6 +46,10 @@ void genSubcommand(Command command, String commands) {
 }
 
 void generate(Command command) {
+  print(r'''
+function __fish_flutter_devices -d 'Run flutter devices and parse output'
+  flutter devices | tail -n +3 | sed -r 's/ \(\w+\)\s+• /\t/g'
+end''');
   print('$c -f');
   command.options.forEach(genOption);
   final commands = command.commands.map((i) => i.name).join(' ');
