@@ -33,6 +33,9 @@ void genOption(Option option, [Command? command]) {
   if (option.short == 'd') {
     s += ' -xa "(__fish_flutter_devices)"';
   }
+  if (option.long == 'launch') {
+    s += ' -xa "(__fish_flutter_emulators)"';
+  }
   print(s);
 }
 
@@ -48,8 +51,11 @@ void genSubcommand(Command command, String commands) {
 void generate(Command command) {
   print(r'''
 complete -c flutter -f -n "__fish_seen_subcommand_from channel" -a "(flutter channel | tail -n +2 | sed 's/\s//g' | sed 's/*\(\w\+\)/\1\tcurrent/')"
-function __fish_flutter_devices -d 'Run flutter devices and parse output'
+function __fish_flutter_devices
   flutter devices | tail -n +3 | sed -r 's/ \(\w+\)\s+• /\t/g'
+end
+function __fish_flutter_emulators
+  flutter emulators | head -n -7 | tail -n +3 | sed -r 's/(\w+)(\s+)• /\1\t/'
 end''');
   command.options.forEach(genOption);
   final commands = command.commands.map((i) => i.name).join(' ');
