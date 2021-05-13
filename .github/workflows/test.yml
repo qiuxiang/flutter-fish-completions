@@ -8,7 +8,7 @@ jobs:
       - uses: fish-actions/install-fish@v1
       - uses: subosito/flutter-action@v1
         with:
-          channel: dev
+          channel: stable
       - run: |
           dart pub get
           dart lib/main.dart > flutter.fish 
