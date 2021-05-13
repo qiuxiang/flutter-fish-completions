@@ -1,7 +1,8 @@
-import 'package:flutter_fish_completions/main.dart';
+import 'package:flutter_fish_completions/parse.dart';
+import 'package:flutter_fish_completions/types.dart';
 import 'package:test/test.dart';
 
-main() {
+void main() {
   test('flutter parse', () async {
     final command = await parse();
     expect(command.options[1].short, 'v');

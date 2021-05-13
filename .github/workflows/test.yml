@@ -11,7 +11,7 @@ jobs:
           channel: dev
       - run: |
           dart pub get
-          dart run > flutter.fish 
+          dart lib/main.dart > flutter.fish 
           mkdir -p ~/.config/fish/completions
           cp flutter.fish ~/.config/fish/completions/
           dart test

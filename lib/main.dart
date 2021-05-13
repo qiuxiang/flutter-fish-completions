@@ -1,3 +1,6 @@
-export 'parse.dart';
-export 'types.dart';
-export 'generate.dart' show generate;
+import 'generate.dart' show generate;
+import 'parse.dart';
+
+void main() {
+  parse().then(generate);
+}

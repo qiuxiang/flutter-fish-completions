@@ -13,10 +13,10 @@ class Option {
 
   @override
   String toString() {
-    return JsonEncoder.withIndent('  ').convert(toJson());
+    return const JsonEncoder.withIndent('  ').convert(toJson());
   }
 
-  toJson() => {'short': short, 'long': long, 'description': description};
+  Map toJson() => {'short': short, 'long': long, 'description': description};
 }
 
 class Command {
@@ -28,17 +28,17 @@ class Command {
 
   Command({this.name = '', this.description = '', this.parent});
 
-  addCommand(Command command) {
+  void addCommand(Command command) {
     command.parent = this;
     commands.add(command);
   }
 
   @override
   String toString() {
-    return JsonEncoder.withIndent('  ').convert(toJson());
+    return const JsonEncoder.withIndent('  ').convert(toJson());
   }
 
-  toJson() => {
+  Map toJson() => {
         'name': name,
         'description': description,
         'options': options.map((i) => i.toJson()).toList(),

@@ -13,7 +13,7 @@ jobs:
           channel: dev
       - run: |
           dart pub get
-          dart run > flutter.fish 
+          dart lib/main.dart > flutter.fish
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1

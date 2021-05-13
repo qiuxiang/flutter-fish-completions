@@ -17,5 +17,5 @@ then put to `~/.config/fish/completions/` or [other completions path](https://fi
 ## Build
 
 ```
-dart run > ~/.config/fish/completions/flutter.fish
+dart lib/main.dart > ~/.config/fish/completions/flutter.fish
 ```

@@ -1,11 +1,11 @@
 import 'package:flutter_fish_completions/generate.dart';
-import 'package:flutter_fish_completions/main.dart';
+import 'package:flutter_fish_completions/types.dart';
 import 'package:test/test.dart';
 
-main() {
+void main() {
   test('generate global option', () async {
     expect(
-      buildOption(Option(
+      buildOption(const Option(
         short: 'h',
         long: 'help',
         description: 'Print this usage information.',
@@ -16,13 +16,13 @@ main() {
 
   test('generate global option without short option', () async {
     expect(
-      buildOption(Option(long: 'long', description: 'description')),
+      buildOption(const Option(long: 'long', description: 'description')),
       'complete -c flutter -l "long" -d "description"',
     );
   });
 
   test('generate subcommand option', () async {
-    final option = Option(
+    const option = Option(
       long: 'watch',
       description:
           'Run analysis continuously, watching the filesystem for changes.',

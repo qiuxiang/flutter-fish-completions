@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:test/test.dart';
 
-main() {
+void main() {
   Future<List<String>> getCompletions(String s) async {
     final result = await Process.run('fish', ['-c', 'complete -C"flutter $s"']);
     expect((result.stderr as String).isEmpty, true);

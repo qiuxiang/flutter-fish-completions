@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'types.dart';
 
-Future<Command> parse([Command? command]) async {
-  const OPTIONS = 1;
-  const COMMANDS = 2;
+const OPTIONS = 1;
+const COMMANDS = 2;
 
+Future<Command> parse([Command? command]) async {
   final arguments = ['help'];
   if (command != null) {
     if (command.parent?.parent != null) {
@@ -24,9 +24,7 @@ Future<Command> parse([Command? command]) async {
   var long = '';
   var description = '';
 
-  if (command == null) {
-    command = Command();
-  }
+  command ??= Command();
 
   for (final line in lines) {
     if (line.startsWith(optionsStarts)) {
