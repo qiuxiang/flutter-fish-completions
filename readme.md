@@ -1,4 +1,6 @@
 # flutter fish completions
+[![test](https://github.com/qiuxiang/flutter-fish-completions/actions/workflows/test.yml/badge.svg)](https://github.com/qiuxiang/flutter-fish-completions/actions/workflows/test.yml)
+
 Generated from `flutter help`.
 
 ## Screenshots
