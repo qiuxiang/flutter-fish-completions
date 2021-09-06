@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'types.dart';
 
-const OPTIONS = 1;
-const COMMANDS = 2;
+class State {
+  static const options = 1;
+  static const commands = 2;
+}
 
 Future<Command> parse([Command? command]) async {
   final arguments = ['help'];
@@ -11,6 +13,7 @@ Future<Command> parse([Command? command]) async {
       arguments.add(command.parent!.name);
     }
     arguments.add(command.name);
+    arguments.add('-v');
   }
   final result = await Process.run('flutter', arguments);
   final lines = (result.stdout as String).split('\n');
@@ -28,15 +31,15 @@ Future<Command> parse([Command? command]) async {
 
   for (final line in lines) {
     if (line.startsWith(optionsStarts)) {
-      state = OPTIONS;
+      state = State.options;
       continue;
     }
     if (line.startsWith('Available commands:') ||
         line.startsWith('Available subcommands:')) {
-      state = COMMANDS;
+      state = State.commands;
       continue;
     }
-    if (state == OPTIONS) {
+    if (state == State.options) {
       if (line.endsWith(':')) continue;
 
       final match = optionRegExp.firstMatch(line);
@@ -58,7 +61,7 @@ Future<Command> parse([Command? command]) async {
           description = groups[2] ?? '';
         }
       }
-    } else if (state == COMMANDS) {
+    } else if (state == State.commands) {
       if (line.isEmpty) break;
       final match = commandRegExp.firstMatch(line);
       if (match == null) break;

@@ -8,7 +8,6 @@ linter:
     avoid_classes_with_only_static_members: true
     avoid_empty_else: true
     avoid_equals_and_hash_code_on_mutable_classes: true
-    avoid_function_literals_in_foreach_calls: true
     avoid_init_to_null: true
     avoid_null_checks_in_equality_operators: true
     avoid_positional_boolean_parameters: true
@@ -39,7 +38,6 @@ linter:
     implementation_imports: true
     library_names: true
     library_prefixes: true
-    lines_longer_than_80_chars: true
     no_duplicate_case_values: true
     non_constant_identifier_names: true
     null_closures: true
