@@ -30,11 +30,13 @@ void genOption(Option option, [Command? command]) {
     return;
   }
   var s = buildOption(option, command);
-  if (option.short == 'd') {
-    s += ' -xa "(__fish_flutter_devices)"';
-  }
-  if (option.long == 'launch') {
-    s += ' -xa "(__fish_flutter_emulators)"';
+  switch (option.long) {
+    case 'device-id':
+      s += ' -xa "(__fish_flutter_devices)"';
+      break;
+    case 'launch':
+      s += ' -xa "(__fish_flutter_emulators)"';
+      break;
   }
   print(s);
 }
