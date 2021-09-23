@@ -37,6 +37,9 @@ void genOption(Option option, [Command? command]) {
     case 'launch':
       s += ' -xa "(__fish_flutter_emulators)"';
       break;
+    case 'target-platform':
+      s += ' -xa "(__fish_flutter_target_platforms)"';
+      break;
   }
   print(s);
 }
@@ -58,6 +61,9 @@ function __fish_flutter_devices
 end
 function __fish_flutter_emulators
   flutter emulators | head -n -7 | tail -n +3 | sed -r 's/(\w+)(\s+)• /\1\t/'
+end
+function __fish_flutter_target_platforms
+  flutter build apk -h | grep android-arm | sed -r 's/\s+\[|\]|\)//g' | sed -r 's/, /\n/g' | sed -r 's/ \(/\t/g' | sed -r 's/x86/x86\t /'
 end''');
   command.options.forEach(genOption);
   final commands = command.commands.map((i) => i.name).join(' ');
