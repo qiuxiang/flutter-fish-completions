@@ -13,12 +13,11 @@ jobs:
       - run: |
           dart pub get
           dart lib/main.dart > flutter.fish
-      - uses: bruceadams/get-release@v1
+      - uses: bruceadams/get-release@v1.2.3
         id: release
         env:
           GITHUB_TOKEN: ${{ github.token }}
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
+      - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
