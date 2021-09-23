@@ -15,7 +15,7 @@ void main() {
     expect(command.commands[1].options.last.long, 'resource-pool-size');
     expect(command.commands[1].options.last.description,
         'The maximum number of concurrent tasks the build system will run.');
-  });
+  }, timeout: const Timeout(Duration(seconds: 60)));
 
   test('flutter analyze parse', () async {
     final options = (await parse(Command(name: 'analyze'))).options;
