@@ -7,12 +7,13 @@ class State {
 }
 
 Future<Command> parse([Command? command]) async {
-  final arguments = ['help'];
+  final arguments = <String>[];
   if (command != null) {
     if (command.parent?.parent != null) {
       arguments.add(command.parent!.name);
     }
     arguments.add(command.name);
+    arguments.add('-h');
     arguments.add('-v');
   }
   final result = await Process.run('flutter', arguments);
