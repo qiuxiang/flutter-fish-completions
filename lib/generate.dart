@@ -66,7 +66,7 @@ end''');
     it.options.forEach((option) => genOption(option, it));
     bool where(Command i) => i.name != it.name;
     final subcommands = it.commands.where(where).map((i) => i.name).join(' ');
-    final name = '${it.name}_commands';
+    final name = '${it.name}_commands'.replaceAll('-', '_');
     if (it.commands.isNotEmpty) {
       print('set -l $name $subcommands');
     }
