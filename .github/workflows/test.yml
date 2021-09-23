@@ -1,5 +1,9 @@
 name: test
-on: push
+on:
+  push:
+    paths:
+      - lib
+      - test
 jobs:
   test:
     runs-on: ubuntu-latest
