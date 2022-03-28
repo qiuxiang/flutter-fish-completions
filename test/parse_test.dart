@@ -1,6 +1,6 @@
 import 'package:flutter_fish_completions/parse.dart';
 import 'package:flutter_fish_completions/types.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('flutter parse', () async {
