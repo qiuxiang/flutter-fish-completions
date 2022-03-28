@@ -71,7 +71,9 @@ end''');
   command.commands.add(Command(name: 'help'));
   for (final it in command.commands) {
     genSubcommand(it, '\$commands');
-    it.options.forEach((option) => genOption(option, it));
+    for (var option in it.options) {
+      genOption(option, it);
+    }
     bool where(Command i) => i.name != it.name;
     final subcommands = it.commands.where(where).map((i) => i.name).join(' ');
     final name = '${it.name}_commands'.replaceAll('-', '_');
@@ -80,7 +82,9 @@ end''');
     }
     for (final it in it.commands) {
       genSubcommand(it, '\$$name');
-      it.options.forEach((option) => genOption(option, it));
+      for (var option in it.options) {
+        genOption(option, it);
+      }
     }
   }
 }

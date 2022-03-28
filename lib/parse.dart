@@ -23,7 +23,7 @@ Future<Command> parse([Command? command]) async {
   final commandRegExp = RegExp(r'\s+(.*?)\s+(.*)');
   final commands = <Future<Command>>[];
 
-  var state;
+  int state = 0;
   var short = '';
   var long = '';
   var description = '';
