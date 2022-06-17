@@ -1,55 +1,57 @@
 import 'dart:io';
+
 import 'types.dart';
 
-class State {
-  static const options = 1;
-  static const commands = 2;
+enum State {
+  options,
+  commands,
 }
 
-Future<Command> parse([Command? command]) async {
-  final arguments = <String>[];
-  if (command != null) {
-    if (command.parent?.parent != null) {
-      arguments.add(command.parent!.name);
-    }
-    arguments.add(command.name);
-    arguments.add('-h');
-    arguments.add('-v');
-  }
-  final result = await Process.run('flutter', arguments);
-  final lines = (result.stdout as String).split('\n');
-  final optionsStarts = command == null ? 'Global options:' : 'Usage:';
-  final optionRegExp = RegExp(r'(-[a-zA-Z],)?\s+(--.*?)?\s+(.*)');
-  final commandRegExp = RegExp(r'\s+(.*?)\s+(.*)');
-  final commands = <Future<Command>>[];
+final optionExp = RegExp(r'(-[a-zA-Z],)?\s+(--.*?)?\s+(.*)');
+final commandExp = RegExp(r' {2}(.*?)\s+(.*)');
+final commandsHeaderExp = RegExp(r'Available (sub)?commands:');
 
-  int state = 0;
+Future<void> parseCommand(Command command) async {
+  final arguments = <String>[];
+  final parent = command.parent;
+  if (parent?.name.isNotEmpty ?? false) {
+    arguments.add(parent!.name);
+  }
+  if (command.name.isNotEmpty) {
+    arguments.add(command.name);
+  }
+  arguments.add('-h');
+  arguments.add('-v');
+
+  final lines = (await Process.run('flutter', arguments)).stdout.split('\n');
+  final optionsStart = command.name.isEmpty ? 'Global options:' : 'Usage:';
   var short = '';
   var long = '';
   var description = '';
-
-  command ??= Command();
-
+  State? state;
   for (final line in lines) {
-    if (line.startsWith(optionsStarts)) {
+    if (line.startsWith(optionsStart)) {
       state = State.options;
       continue;
     }
-    if (line.startsWith('Available commands:') ||
-        line.startsWith('Available subcommands:')) {
+
+    if (commandsHeaderExp.hasMatch(line)) {
       state = State.commands;
       continue;
     }
-    if (state == State.options) {
-      if (line.endsWith(':')) continue;
 
-      final match = optionRegExp.firstMatch(line);
+    if (state == State.options) {
+      if (line.isEmpty || line.endsWith(':')) {
+        continue;
+      }
+
+      final match = optionExp.firstMatch(line);
       if (match != null) {
         final groups = match.groups([1, 2, 3]);
         if (groups[1] == null) {
-          description += groups[2] ?? '';
+          description += ' ' + groups[2]!;
         } else {
-          if (long.isNotEmpty) {
+          if (long.isNotEmpty && (command.name.isEmpty || short != 'h')) {
             command.options.add(Option(
               short: short,
               long: long,
@@ -63,26 +65,33 @@ Future<Command> parse([Command? command]) async {
         }
       }
     } else if (state == State.commands) {
-      if (line.isEmpty) break;
-      final match = commandRegExp.firstMatch(line);
-      if (match == null) break;
-      commands.add(parse(Command(
-        name: match.group(1) ?? '',
-        description: match.group(2) ?? '',
+      final match = commandExp.firstMatch(line);
+      if (match == null) {
+        continue;
+      }
+
+      command.addCommand(Command(
+        name: match.group(1)!,
+        description: match.group(2)!,
         parent: command,
-      )));
+      ));
     }
   }
 
-  if (long.isNotEmpty) {
+  if (long.isNotEmpty && (command.name.isEmpty || short != 'h')) {
     command.options.add(Option(
       short: short,
       long: long,
       description: description,
     ));
   }
+}
 
-  (await Future.wait(commands)).forEach(command.commands.add);
-
+Future<Command> parse() async {
+  final command = Command();
+  await parseCommand(command);
+  for (final subcommand in command.commands) {
+    await parseCommand(subcommand);
+  }
   return command;
 }

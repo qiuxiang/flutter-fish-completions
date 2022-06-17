@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 void main() {
   Future<List<String>> getCompletions(String s) async {
@@ -13,8 +13,8 @@ void main() {
 
   test('complete commands', () async {
     final lines = await getCompletions('');
-    expect(lines[0], 'analyze	Analyze the project\'s Dart code.');
-    expect(lines[1], 'assemble	Assemble and build Flutter resources.');
+    expect(lines[0], 'bash-completion\tOutput command line shell completion setup scripts.');
+    expect(lines[1], 'channel\tList or switch Flutter channels.');
   });
 
   test('complete global options', () async {
@@ -26,6 +26,6 @@ void main() {
   test('complete flutter analyze options', () async {
     final lines = await getCompletions('analyze -');
     expect(lines.last,
-        '--no-fatal-warnings	Treat warning level issues as fatal.(defaults to on)');
+        '--no-fatal-warnings\tTreat warning level issues as fatal. (defaults to on)');
   });
 }

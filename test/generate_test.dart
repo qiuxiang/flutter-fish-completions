@@ -1,6 +1,6 @@
 import 'package:flutter_fish_completions/generate.dart';
 import 'package:flutter_fish_completions/types.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 void main() {
   test('generate global option', () async {
