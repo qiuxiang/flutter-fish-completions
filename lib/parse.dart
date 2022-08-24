@@ -92,6 +92,10 @@ Future<Command> parse() async {
   await parseCommand(command);
   for (final subcommand in command.commands) {
     await parseCommand(subcommand);
+    // No recursion need, max depth should not exceed 3
+    for (final subSubcommand in subcommand.commands) {
+      await parseCommand(subSubcommand);
+    }
   }
   return command;
 }
