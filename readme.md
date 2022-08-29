@@ -11,7 +11,7 @@ Generated from `flutter help`.
 <img width=720 src="https://user-images.githubusercontent.com/1709072/103187656-1ec53380-4900-11eb-8f7f-d1c4c06caaa1.png" />
 <img width=720 src="https://user-images.githubusercontent.com/1709072/103187675-3997a800-4900-11eb-8666-373dbce23cae.png" />
 
-## Usage
+## Install
 
 Download `flutter.fish` from [Release](https://github.com/qiuxiang/flutter.fish/releases),
 then put to `~/.config/fish/completions/` or [other completions path](https://fishshell.com/docs/current/index.html#where-to-put-completions).
