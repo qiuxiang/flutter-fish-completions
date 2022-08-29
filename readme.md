@@ -16,6 +16,10 @@ Generated from `flutter help`.
 Download `flutter.fish` from [Release](https://github.com/qiuxiang/flutter.fish/releases),
 then put to `~/.config/fish/completions/` or [other completions path](https://fishshell.com/docs/current/index.html#where-to-put-completions).
 
+```
+curl https://github.com/qiuxiang/flutter-fish-completions/releases/latest/download/flutter.fish -Lo ~/.config/fish/completions/flutter.fish
+```
+
 ## Build
 
 ```
