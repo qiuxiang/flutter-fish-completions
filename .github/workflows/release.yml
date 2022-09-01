@@ -22,7 +22,7 @@ jobs:
           dart lib/main.dart > completions/flutter.fish
           git config user.name 7c00
           git config user.email i@7c00.cc
-          git commit -am 'Update flutter.fish'
+          git commit -am 'Update flutter.fish' || true
           git push
       - uses: actions/upload-release-asset@v1
         env:
