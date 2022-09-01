@@ -7,16 +7,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: main
       - uses: subosito/flutter-action@v1
         with:
           channel: stable
-      - run: |
-          dart pub get
-          dart lib/main.dart > flutter.fish
       - uses: bruceadams/get-release@v1.2.3
         id: release
         env:
           GITHUB_TOKEN: ${{ github.token }}
+      - name: Build
+        run: |
+          dart pub get
+          dart lib/main.dart > completions/flutter.fish
+          git config user.name 7c00
+          git config user.email i@7c00.cc
+          git commit -am 'Update flutter.fish'
+          git push
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
