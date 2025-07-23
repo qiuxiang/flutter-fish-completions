@@ -4,9 +4,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: fish-actions/install-fish@v1
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
           channel: stable
       - run: |
@@ -15,7 +15,7 @@ jobs:
           mkdir -p ~/.config/fish/completions
           cp flutter.fish ~/.config/fish/completions/
           dart test
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v4
         with:
           name: flutter.fish
           path: flutter.fish
