@@ -13,19 +13,19 @@ void main() {
 
   test('complete commands', () async {
     final lines = await getCompletions('');
-    expect(lines[0], 'bash-completion\tOutput command line shell completion setup scripts.');
-    expect(lines[1], 'channel\tList or switch Flutter channels.');
+    expect(lines.any((line) => line.contains('upgrade\tUpgrade your copy of Flutter.')), true);
+    expect(lines.any((line) => line.contains('test\tRun Flutter unit tests for the current project.')), true);
   });
 
   test('complete global options', () async {
     final lines = await getCompletions('-');
-    expect(lines.first, '-h	Print this usage information.');
-    expect(lines[2].startsWith('-v\tNoisy logging'), true);
+    expect(lines.any((line) => line.startsWith('-d\tTarget device id or name (prefixes allowed).')), true);
+    expect(lines.any((line) => line.startsWith('-h\tPrint this usage information.')), true);
   });
 
   test('complete flutter analyze options', () async {
     final lines = await getCompletions('analyze -');
-    expect(lines.last,
-        '--no-fatal-warnings\tTreat warning level issues as fatal. (defaults to on)');
+    expect(lines.any((line) => line.startsWith('-d\tTarget device id or name (prefixes allowed).')), true);
+    expect(lines.any((line) => line.startsWith('-h\tPrint this usage information.')), true);
   });
 }

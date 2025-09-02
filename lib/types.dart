@@ -5,11 +5,7 @@ class Option {
   final String long;
   final String description;
 
-  const Option({
-    this.short = '',
-    this.long = '',
-    this.description = '',
-  });
+  const Option({this.short = '', this.long = '', this.description = ''});
 
   @override
   String toString() {
@@ -39,9 +35,9 @@ class Command {
   }
 
   Map toJson() => {
-        'name': name,
-        'description': description,
-        'options': options.map((i) => i.toJson()).toList(),
-        'commands': commands.map((i) => i.toJson()).toList(),
-      };
+    'name': name,
+    'description': description,
+    'options': options.map((i) => i.toJson()).toList(),
+    'commands': commands.map((i) => i.toJson()).toList(),
+  };
 }

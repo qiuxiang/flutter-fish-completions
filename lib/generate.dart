@@ -23,8 +23,9 @@ String buildOption(Option option, [Command? command]) {
 
 void genOption(Option option, [Command? command]) {
   if (option.long.startsWith('[no-]')) {
-    void gen(String long) => print(buildOption(
-        Option(long: long, description: option.description), command));
+    void gen(String long) => print(
+      buildOption(Option(long: long, description: option.description), command),
+    );
     gen(option.long.replaceAll('[no-]', ''));
     gen(option.long.replaceAll('[no-]', 'no-'));
     return;

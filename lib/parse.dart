@@ -2,10 +2,7 @@ import 'dart:io';
 
 import 'types.dart';
 
-enum State {
-  options,
-  commands,
-}
+enum State { options, commands }
 
 final optionExp = RegExp(r'(-[a-zA-Z],)?\s+(--.*?)?\s+(.*)');
 final commandExp = RegExp(r' {2}(.*?)\s+(.*)');
@@ -49,14 +46,12 @@ Future<void> parseCommand(Command command) async {
       if (match != null) {
         final groups = match.groups([1, 2, 3]);
         if (groups[1] == null) {
-          description += ' ' + groups[2]!;
+          description += ' ${groups[2]!}';
         } else {
           if (long.isNotEmpty && (command.name.isEmpty || short != 'h')) {
-            command.options.add(Option(
-              short: short,
-              long: long,
-              description: description,
-            ));
+            command.options.add(
+              Option(short: short, long: long, description: description),
+            );
           }
 
           short = groups[0]?.substring(1, 2) ?? '';
@@ -70,20 +65,20 @@ Future<void> parseCommand(Command command) async {
         continue;
       }
 
-      command.addCommand(Command(
-        name: match.group(1)!,
-        description: match.group(2)!,
-        parent: command,
-      ));
+      command.addCommand(
+        Command(
+          name: match.group(1)!,
+          description: match.group(2)!,
+          parent: command,
+        ),
+      );
     }
   }
 
   if (long.isNotEmpty && (command.name.isEmpty || short != 'h')) {
-    command.options.add(Option(
-      short: short,
-      long: long,
-      description: description,
-    ));
+    command.options.add(
+      Option(short: short, long: long, description: description),
+    );
   }
 }
 
